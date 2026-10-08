@@ -1,0 +1,16 @@
+{
+  // // @ts-check 가 붙은 JS 파일을 types/globals.d.ts 기준으로 검사한다 (빌드·변환 없음).
+  // 편집기(VS Code 등)가 자동으로 읽고, 명령줄 검사는: npm install 후 npm run check
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "checkJs": false,   // // @ts-check 가 붙은 파일만 검사 (vendor 원본은 제외)
+    "noEmit": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true
+  },
+  "include": ["inject.js", "version-badge.js", "labels/shim.js", "labels/model-picker.js", "labels/memo-vocab.js", "labels/hover-card.js", "labels/vocab-highlight.js", "labels/label-suggest.js", "labels/common.js", "labels/thread-status.js", "labels/thread-actions.js", "labels/sidebar-filter.js", "labels/filter-window.js", "labels/task-pet.js", "labels/memo-mcp.cjs", "labels/appserver.cjs", "labels/summary-server.cjs", "labels/summary-home.cjs", "types/**/*.d.ts"],
+  "files": ["labels/subscription-usage.js", "labels/task-progress-model.js", "labels/task-progress.js"],
+  "exclude": ["labels/vendor", "node_modules"]
+}

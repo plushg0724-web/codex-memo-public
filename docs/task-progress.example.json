@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "source": {
+    "kind": "sample",
+    "label": "미니 그래프 검증용 가상 체크리스트 · 실제 업무 아님",
+    "ref": "local-ui-fixture"
+  },
+  "projects": [
+    {
+      "id": "erp",
+      "stage": "가상 검토 단계",
+      "summary": "1/2 완료 막대를 확인하기 위한 예시입니다. 실제 프로젝트 현황과 관계없습니다.",
+      "blockers": ["가상 검토 대기"],
+      "nextAction": "가상 미완료 항목이 상세에 보이는지 확인합니다.",
+      "checklist": {
+        "complete": true,
+        "items": [
+          {"id": "fixture-import", "text": "가상 가져오기", "done": true},
+          {"id": "fixture-review", "text": "가상 검토", "done": false}
+        ]
+      }
+    }
+  ]
+}

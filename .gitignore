@@ -1,0 +1,48 @@
+# 개인 데이터 (메모 내용, 단어장 모델 설정)
+memos/
+labels/settings.json
+labels/settings.json.tmp
+
+__pycache__/
+*.pyc
+node_modules/
+labels/sheets-pending.json
+.jevrouter/
+
+# 테스트 스크린샷
+output/
+
+# TypeScript build and release artifacts
+dist/
+release/
+.venv/
+macos/build/
+
+# Local credentials, signing material and user-generated data
+.env
+.env.*
+!.env.example
+auth.json
+control.json
+*.p12
+*.pfx
+*.pem
+*.key
+*.p8
+*.mobileprovision
+*.log
+.DS_Store
+venv/
+.venv-*/
+.codex/
+outputs/
+labels/labels.json
+labels/vocabulary.json
+labels/sheets.json
+labels/task-progress.json
+labels/assignments.json
+agent-history.json
+account-backup-last-data.json
+shortcuts.json
+backups/
+exports/

@@ -1,0 +1,5 @@
+pynput
+pystray
+pillow
+websocket-client
+comtypes; sys_platform == "win32"

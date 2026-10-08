@@ -1,0 +1,45 @@
+{
+  "reviewDate": "2026-10-08",
+  "files": [
+    {
+      "file": "Python-3.14.2-LICENSE.txt",
+      "source": "CPython 3.14.2 macOS python.org installation, lib/python3.14/LICENSE.txt",
+      "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231"
+    },
+    {
+      "file": "Python-3.14.2-INCORPORATED.txt",
+      "source": "CPython 3.14.2 bundled documentation, _sources/license.rst.txt",
+      "sha256": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd"
+    },
+    {
+      "file": "PyInstaller-6.22.3-COPYING.txt",
+      "source": "PyInstaller 6.22.3 wheel, dist-info/licenses/COPYING.txt",
+      "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+    },
+    {
+      "file": "websocket-client-LICENSE.txt",
+      "source": "websocket-client 1.9.2 wheel, dist-info/licenses/LICENSE",
+      "sha256": "14214b7bbb6952ada76afea206b6c393f2563d4e7678be0232e1a1d216716679"
+    },
+    {
+      "file": "Node-24.21.0-LICENSE.txt",
+      "source": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz: LICENSE",
+      "sha256": "5888dbb9a1d2b18f2c3e6c5f6af1b39de658372b402a0577b002777f14c62ace"
+    },
+    {
+      "file": "OpenSSL-3.0.18-LICENSE.txt",
+      "source": "https://raw.githubusercontent.com/openssl/openssl/openssl-3.0.18/LICENSE.txt",
+      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+    },
+    {
+      "file": "Zstandard-1.5.7-LICENSE.txt",
+      "source": "https://raw.githubusercontent.com/facebook/zstd/v1.5.7/LICENSE",
+      "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+    },
+    {
+      "file": "XZ-5.2.3-COPYING.txt",
+      "source": "https://raw.githubusercontent.com/tukaani-project/xz/v5.2.3/COPYING",
+      "sha256": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8"
+    }
+  ]
+}

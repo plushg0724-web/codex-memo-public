@@ -1,0 +1,79 @@
+Codex 메모 for macOS — Third-party notices
+Review date: 2026-10-08
+
+This inventory records the components observed in the macOS build environment
+and frozen helper. It does not assign a license to Codex 메모.
+The runtime-manifest.json in each app is the source of its exact runtime versions.
+Full upstream license texts accompany this document in the licenses directory;
+licenses/SOURCES.json records their origins and SHA-256 checksums.
+
+1. Node.js 24.21.0
+   Source: https://nodejs.org/dist/v24.21.0/
+   Copyright Node.js contributors; MIT and the incorporated component licenses
+   reproduced in licenses/Node-24.21.0-LICENSE.txt.
+   The app includes the official node executable and its license, not npm or the
+   full development installation. Node's full LICENSE includes notices for V8,
+   libuv, OpenSSL, zlib, zstd and other incorporated components.
+
+2. CPython 3.14.2 and its standard library
+   Source: the official python.org macOS Python.framework installation.
+   Python Software Foundation License Version 2 and the historical agreements
+   reproduced in licenses/Python-3.14.2-LICENSE.txt.
+   Incorporated-software notices from the same installed version are preserved
+   in licenses/Python-3.14.2-INCORPORATED.txt. That document includes notices for
+   expat, libmpdec, hash implementations, codecs and other standard-library code.
+   Packaging changes: PyInstaller collects the required Python modules into a
+   frozen executable and relocates collected shared-library references into the
+   application bundle; the Python source itself is not modified by this project.
+
+3. websocket-client
+   Source: https://github.com/websocket-client/websocket-client
+   Apache License 2.0; see licenses/websocket-client-LICENSE.txt.
+   The license text was collected from the installed 1.9.2 wheel. Its module
+   headers state Copyright 2026 engn33r. The package metadata identifies liris
+   as author. The build must record the actual installed package version.
+   No project modifications to this dependency were identified in this audit.
+
+4. PyInstaller 6.22.3 bootloader and runtime support
+   Source: https://github.com/pyinstaller/pyinstaller
+   Copyright (c) 2010-2023, PyInstaller Development Team
+   Copyright (c) 2005-2009, Giovanni Bajo
+   Based on previous work under copyright (c) 2002 McMillan Enterprises, Inc.
+   See licenses/PyInstaller-6.22.3-COPYING.txt for GPL terms, the bootloader
+   exception, and the separately licensed runtime-hook provisions.
+   The bootloader exception permits distributing combined executables without
+   imposing the bootloader's GPL terms on the application. This does not change
+   the licenses of the application's other dependencies.
+   Reference: https://pyinstaller.org/en/stable/license.html
+
+5. Libraries collected with this CPython build
+   OpenSSL 3.0.18: libssl.3.dylib and libcrypto.3.dylib; Apache License 2.0.
+   See licenses/OpenSSL-3.0.18-LICENSE.txt.
+   Zstandard 1.5.7: libzstd.1.dylib; BSD license text reproduced in
+   licenses/Zstandard-1.5.7-LICENSE.txt.
+   XZ/liblzma 5.2.3: included in the _lzma extension; upstream licensing scope
+   is recorded in licenses/XZ-5.2.3-COPYING.txt. The included liblzma code is
+   described there as public domain. No xz command-line tool is distributed.
+   Version evidence: CPython runtime SSL/zstd queries, the _lzma binary version
+   string, and CPython v3.14.2 Mac/BuildScript/build-installer.py.
+   macOS system libraries referenced under /usr/lib and system frameworks are
+   supplied by macOS and are not copied into this application's distribution.
+
+6. Build-only tools
+   TypeScript and @types/node compile/check the project. altgraph, macholib,
+   setuptools and PyInstaller's build tooling are build dependencies. They were
+   not present as third-party modules in the reviewed frozen Python module
+   table. The only third-party Python package in that table was websocket.
+   Re-audit the frozen table whenever the environment or imports change.
+
+7. Codex 메모 project and host applications
+   The macOS build packages this repository's helper/UI scripts and the runtimes
+   listed above. Its build path does not copy ChatGPT.app/Codex.app internals,
+   OpenAI account credentials, user notes, or the installed Codex CLI into the
+   bundle. At runtime the helper locates and invokes an existing host app/CLI.
+   Codex 메모 is an unofficial independent helper. OpenAI host applications and
+   services are obtained separately and remain subject to their own terms.
+
+Release maintenance
+   Preserve these full license texts in every distributable archive/app.
+   Update this inventory and exact-version texts if any runtime changes.
