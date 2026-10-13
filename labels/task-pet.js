@@ -3,6 +3,8 @@
 // v9: 지난 결과를 바로 보이고 뒤에서 다시 확인한다. 모델 설명은 나중에 채운다. 펫이 할 일 수와 표정으로 상태를 알린다.
 // 패널 위쪽 전환으로 '업무 진척'(task-progress.js, JSON 수동 동기화) 보기를 연다.
 (() => {
+  const display = /** @type {any} */ (window).__cxmDisplay;
+  function start() {
   const VERSION = 9;
   const w = /** @type {any} */ (window);
   const initialRoute = new URLSearchParams(location.search).get('initialRoute') || '';
@@ -894,4 +896,8 @@
   }
   w.__cxmTaskPet = { version: VERSION, destroy, show, open: openPanel, refresh: suggest, get stale() { return stale; }, get hidden() { return sleeping; } };
   if (document.body) mount(); else on(document, 'DOMContentLoaded', mount, { once: true });
+  }
+  const stop = () => { try { /** @type {any} */ (window).__cxmTaskPet?.destroy(); } catch { /* 이전 화면 정리 */ } };
+  if (display) display.register('petEnabled', {start, stop});
+  else stop();
 })();

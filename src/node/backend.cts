@@ -21,6 +21,7 @@ const {createSheetSync, vocabRow, memoRow} = require('../../labels/sheets.cjs') 
 import {withServer, createServerPool} from './appserver.cjs';
 import {createBackup} from './backup.cjs';
 import {createSettingsStore} from './settings-store.cjs';
+import {createDisplaySettings} from './display-settings.cjs';
 import {createSubscriptionUsage} from './subscription-usage.cjs';
 import {createVocabularyService} from './vocabulary-service.cjs';
 import {createCodexFinder} from './codex-executable.cjs';
@@ -63,6 +64,7 @@ const DATA_DIR = process.env.CODEX_MEMO_DATA || APP_LABELS_DIR;
 const settingsStore = createSettingsStore(path.join(DATA_DIR, 'settings.json'));
 const readSettings = settingsStore.read;
 const saveSettings = settingsStore.update;
+const displaySettings = createDisplaySettings(settingsStore, () => emit('changed'));
 const subscriptionUsage = createSubscriptionUsage({exe: findCodex, settings: readSettings, saveSettings});
 const {createPetModel} = require('../../labels/pet-model.cjs') as LegacyModules['petModel'];
 const petModel = createPetModel({server: summaryServer, settings: readSettings, saveSettings});
@@ -352,6 +354,8 @@ try {
 // local, durable, remote-ssh-discovered:codex-runner-a1 처럼 바뀌므로(그 자체에 ':' 가 들어가기도 함),
 // 화면(vendor/renderer.js)은 항상 host=local 로 묻고, 여기서는 저장된 열쇠를 host 와 상관없이 같은 대화로 묶는다.
 const methods: BackendHandlers = {
+  displaySettings: () => displaySettings.read(),
+  displaySettingsSet: (_sender, patch) => displaySettings.set(patch),
   subscriptionUsage: (_sender, force) => subscriptionUsage.read(force),
   subscriptionFeeSet: (_sender, feeKrw) => subscriptionUsage.setFee(feeKrw),
   // 라벨

@@ -1,4 +1,5 @@
 """구독 할당량 표시: 실제 Chromium에서 환산 표시·저장·실패·재주입·주기 갱신 검증."""
+import os
 import unittest
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -27,7 +28,7 @@ class SubscriptionUsageTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.playwright = sync_playwright().start()
-        cls.browser = cls.playwright.chromium.launch(channel='chrome', headless=True)
+        cls.browser = cls.playwright.chromium.launch(channel=os.environ.get('PLAYWRIGHT_CHANNEL', 'chrome'), headless=True)
 
     @classmethod
     def tearDownClass(cls):

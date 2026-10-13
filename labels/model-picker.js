@@ -1,7 +1,7 @@
 // @ts-check
 // 공통 설정창의 단어장 요약 설정(모델·추론 강도·FAST·작성 지침)과 자동 판단 설정을 담당한다.
 (function installModelPicker() {
-  const VERSION = 8;
+  const VERSION = 9;
   const w = /** @type {any} */ (window);
   const DIALOG_ID = "cdx-label-settings";
   if (!window.codexLabels?.vocabularyRead) return;
@@ -78,7 +78,7 @@
     #cdx-label-settings .cxm-setting-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; max-width: 390px; font-size: 13px; }
     #cdx-label-settings .cxm-setting-field select { width: 100%; }
     #cdx-label-settings .cxm-setting-toggle { display: flex; align-items: center; gap: 8px; max-width: 390px; font-size: 13px; }
-    #cdx-label-settings .cxm-setting-toggle input { width: 16px; height: 16px; margin: 0; accent-color: #7dd3fc; }
+    #cdx-label-settings .cxm-setting-toggle input { appearance: auto; -webkit-appearance: checkbox; opacity: 1; position: static; width: 16px; height: 16px; margin: 0; accent-color: #7dd3fc; }
     #cdx-label-settings .cxm-setting-toggle small { color: #aeb5bf; }
     #cdx-label-settings .cxm-settings-guide { margin-top: 22px; max-width: 560px; }
     #cdx-label-settings .cxm-settings-guide textarea { width: 100%; min-height: 190px; resize: vertical; box-sizing: border-box; font: inherit; font-size: 12px; line-height: 1.55; padding: 8px; }
@@ -416,6 +416,51 @@
     void load();
   }
 
+  function mountDisplay(box) {
+    box.replaceChildren(element('h3', '', '화면 표시'));
+    const note = element('p', 'cxm-settings-note'); note.setAttribute('aria-live', 'polite');
+    const inputs = {};
+    let current = null;
+    for (const [key, label, help] of [
+      ['petEnabled', '펫 활성화', '다음 할 일을 추천하는 펫을 표시합니다. 기본값은 꺼짐입니다.'],
+      ['showUsageAmount', '사용량 금액 표시', '사이드바에 구독료로 환산한 사용량 금액을 표시합니다.'],
+    ]) {
+      const input = element('input'); input.type = 'checkbox'; input.id = 'cxm-settings-' + key;
+      const field = element('label', 'cxm-setting-toggle'); field.htmlFor = input.id;
+      field.append(input, element('span', '', label));
+      input.addEventListener('change', () => { void save(key, input.checked); });
+      inputs[key] = input;
+      box.append(field, element('p', 'cxm-settings-note', help));
+    }
+    const retry = button('설정 다시 불러오기', () => { void load(); }); retry.hidden = true;
+    box.append(note, retry);
+    const valid = value => typeof value?.petEnabled === 'boolean' && typeof value?.showUsageAmount === 'boolean';
+    const state = section(box, note, () => {
+      for (const input of Object.values(inputs)) input.disabled = state.blocked() || !current;
+      retry.disabled = state.blocked();
+    });
+    function fill() { for (const [key, input] of Object.entries(inputs)) input.checked = current?.[key] === true; }
+    function apply(value) {
+      if (!valid(value)) throw Error('화면 설정 응답을 확인하지 못했습니다.');
+      current = value; fill(); w.__cxmDisplay?.apply(value);
+    }
+    function load() {
+      retry.hidden = true;
+      return state.run('loading', '화면 설정을 불러오는 중…', () => state.call('displaySettings'), value => {
+        apply(value); message(note, '변경하면 바로 저장되어 다음 실행에도 유지됩니다.');
+      }, error => { message(note, errorText(error), true); retry.hidden = false; });
+    }
+    function save(key, enabled) {
+      if (state.blocked() || !current) { fill(); return; }
+      retry.hidden = true;
+      return state.run('saving', '저장 중…', () => state.call('displaySettingsSet', {[key]: enabled}), value => {
+        if (!valid(value) || value[key] !== enabled) throw Error('설정 저장을 확인하지 못했습니다.');
+        apply(value); message(note, '저장했습니다. 화면에 바로 적용했습니다.');
+      }, error => { fill(); message(note, errorText(error), true); retry.hidden = false; });
+    }
+    void load();
+  }
+
   function retireDetached() {
     let changed = false;
     for (const [box, state] of sections) if (!box.isConnected) { state.destroy(); sections.delete(box); changed = true; }
@@ -443,7 +488,7 @@
   cleanups.push(() => observer.disconnect());
   /** @type {WeakSet<Element>} */
   let observedDialogs = new WeakSet();
-  const SECTIONS = ".cxm-settings-model, .cxm-settings-auto";
+  const SECTIONS = ".cxm-settings-model, .cxm-settings-auto, .cxm-settings-display";
   /** @param {Node[]} roots */
   function scan(roots = [document]) {
     if (disposed) return;
@@ -456,6 +501,12 @@
       const dialog = inside || (root instanceof Element ? root.querySelector("#" + DIALOG_ID)
         : root === document ? document.getElementById(DIALOG_ID) : null);
       if (!dialog) continue;
+      // Also add this section to settings dialogs from an already open app.
+      const model = dialog.querySelector('.cxm-settings-model');
+      if (model?.parentElement?.matches('[role=tabpanel]') && !dialog.querySelector('.cxm-settings-display')) {
+        const display = element('div', 'cxm-settings-display');
+        model.parentElement.prepend(display);
+      }
       if (cxm && !observedDialogs.has(dialog)) {
         observer.observe(dialog, {childList: true, subtree: true}); observedDialogs.add(dialog);
       }
@@ -464,7 +515,7 @@
         const node = /** @type {HTMLElement} */ (box);
         if (node.dataset.cxmSettingsVersion === String(VERSION)) continue;
         node.dataset.cxmSettingsVersion = String(VERSION);
-        (node.classList.contains("cxm-settings-model") ? mountModel : mountAutomation)(node);
+        (node.classList.contains("cxm-settings-display") ? mountDisplay : node.classList.contains("cxm-settings-model") ? mountModel : mountAutomation)(node);
       }
     }
   }

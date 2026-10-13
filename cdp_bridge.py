@@ -24,7 +24,7 @@ LABELS_ENABLED = True
 PAGE_URL_PREFIX = "app://-/"        # Codex 화면 페이지만 대상으로 한다
 MAIN_PAGE_URL = PAGE_URL_PREFIX + "index.html"   # 대화 목록이 있는 메인 화면
 BINDING = "__codexMemoBridge"       # 화면 → 도우미 호출 함수 이름
-RESPONDERS = ("__cxlBridge", "__cxmPicker", "__cxmUsage")   # 화면 요청별 응답 객체
+RESPONDERS = ("__cxlBridge", "__cxmPicker", "__cxmUsage", "__cxmDisplayReply")   # 화면 요청별 응답 객체
 POLL_SECONDS = 1.5
 BACKEND_REQUEST_SECONDS = 180
 PAGE_REQUEST_SECONDS = {"vocabularySummarize": 150, "vocabularyReanalyze": 150,
@@ -32,7 +32,7 @@ PAGE_REQUEST_SECONDS = {"vocabularySummarize": 150, "vocabularyReanalyze": 150,
 # DOM 준비 후 실행 순서: 단어장 → 라벨 → 모델 선택 → 메모 통합 → 마우스 올림 카드 → 단어 본문 표시
 # → 라벨 추천 → 대화 상태 → 대화 옮기기 → 목록 필터 → 메모 펫 (단어장 문단 도구는 단어장보다 먼저)
 LABEL_SCRIPTS = (
-    "vocabulary-content.js", "vendor/vocabulary-renderer.js", "vendor/renderer.js", "model-picker.js",
+    "display-settings.js", "vocabulary-content.js", "vendor/vocabulary-renderer.js", "vendor/renderer.js", "model-picker.js",
     "thread-open.js", "memo-vocab.js", "hover-card.js", "vocab-highlight.js", "label-suggest.js",
     "thread-status.js", "thread-actions.js", "sidebar-filter.js", "filter-window.js",
     "task-progress-model.js", "task-progress.js", "task-pet.js", "subscription-usage.js",

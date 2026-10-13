@@ -16,7 +16,7 @@ import time
 
 ROOT = Path(__file__).resolve().parent.parent
 UI = {
-    "test_common.py", "test_header_labels.py", "test_highlights.py", "test_hover_card.py",
+    "test_display_settings.py", "test_common.py", "test_header_labels.py", "test_highlights.py", "test_hover_card.py",
     "test_label_separation.py", "test_label_suggest.py", "test_memo_draft.py", "test_memo_jump.py", "test_model_picker.py",
     "test_quick_launch.py", "test_shim_read.py", "test_sidebar_filter.py",
     "test_task_pet_ui.py", "test_task_progress_ui.py", "test_thread_status.py", "test_ui.py",

@@ -1,6 +1,8 @@
 // @ts-check
 // 현재 Codex 할당량 한 주기를 30일 구독료로 시간 비례 환산한다.
 (() => {
+  const display = /** @type {any} */ (window).__cxmDisplay;
+  function start() {
   const w = /** @type {any} */ (window), VERSION = 1;
   if (w.__cxmSubscription?.version === VERSION) { w.__cxmSubscription.attach(); return; }
   w.__cxmSubscription?.destroy();
@@ -165,4 +167,8 @@
   }};
   w.__cxmSubscription = runtime;
   attach(); render(); void refresh();
+  }
+  const stop = () => { try { /** @type {any} */ (window).__cxmSubscription?.destroy(); } catch { /* 이전 화면 정리 */ } };
+  if (display) display.register('showUsageAmount', {start, stop});
+  else start();
 })();

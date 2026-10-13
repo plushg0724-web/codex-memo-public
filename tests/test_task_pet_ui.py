@@ -2,6 +2,7 @@
 
 Run: python tests/test_task_pet_ui.py
 """
+import os
 import sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
@@ -24,6 +25,7 @@ HTML = f"""<!doctype html><html><head><meta charset="utf-8"></head><body>
 </main></div>
 </body></html>"""
 MOCKS = f"""() => {{
+  window.__cxmDisplay = {{register: (_key, feature) => feature.start()}};
   window.__cxmTaskPetAuto = false; sessionStorage.removeItem('cxm-task-pet-result'); localStorage.removeItem('cxm-task-pet-skipped');
   window.__calls = []; window.__pending = []; window.__mode = 'ok';
   window.__reads = 0; window.__readMode = 'ok'; window.__readPending = [];
@@ -90,7 +92,7 @@ def check(name, condition):
 
 
 with sync_playwright() as p:
-    browser = p.chromium.launch(channel="chrome", headless=True)
+    browser = p.chromium.launch(channel=os.environ.get("PLAYWRIGHT_CHANNEL", "chrome"), headless=True)
     page = browser.new_page(viewport={"width": 1024, "height": 900})
     errors = []
     page.on("pageerror", lambda e: errors.append(str(e)))

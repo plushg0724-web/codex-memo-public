@@ -1,5 +1,6 @@
 """Mocked settings lifecycle checks; no Codex process or provider is contacted."""
 
+import os
 import unittest
 import re
 from pathlib import Path
@@ -62,7 +63,7 @@ class ModelPickerTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.playwright = sync_playwright().start()
-        cls.browser = cls.playwright.chromium.launch(channel="chrome", headless=True)
+        cls.browser = cls.playwright.chromium.launch(channel=os.environ.get("PLAYWRIGHT_CHANNEL", "chrome"), headless=True)
 
     @classmethod
     def tearDownClass(cls):

@@ -3,6 +3,8 @@ import type {BackupStatus, BackupCreateResult, BackupList, BackupRestoreResult} 
 
 /** Each method has one tuple for wire arguments and one result type. */
 export interface BackendMethods {
+  displaySettings: {args: []; result: import('./display-settings.cjs').DisplaySettings};
+  displaySettingsSet: {args: [patch: Partial<import('./display-settings.cjs').DisplaySettings>]; result: import('./display-settings.cjs').DisplaySettings};
   subscriptionUsage: {args: [force?: boolean]; result: import('./subscription-usage.cjs').SubscriptionUsage};
   subscriptionFeeSet: {args: [feeKrw: number]; result: number};
   read: {args: [knownVersion?: string | null]; result: D.LabelSnapshot | null};
@@ -146,6 +148,13 @@ function thresholds(value: unknown): Partial<D.AutoThresholds> {
 }
 
 const decoders: {[K in MethodName]: (args: unknown[]) => MethodArgs<K>} = {
+  displaySettings: () => [],
+  displaySettingsSet: a => {
+    const value = object(a[0]), patch: Partial<import('./display-settings.cjs').DisplaySettings> = {};
+    for (const key of ['petEnabled', 'showUsageAmount'] as const)
+      if (Object.hasOwn(value, key)) patch[key] = boolean(value[key]);
+    return [patch];
+  },
   subscriptionUsage: a => [optional(a[0], boolean)],
   subscriptionFeeSet: a => [number(a[0])],
   read: a => [a[0] == null ? a[0] : text(a[0])],
